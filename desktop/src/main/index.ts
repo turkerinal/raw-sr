@@ -16,7 +16,8 @@ import {
 } from 'electron'
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process'
 import { createServer } from 'node:net'
-import { accessSync, constants as fsConstants } from 'node:fs'
+import { accessSync, existsSync, mkdirSync, readdirSync, rmSync, constants as fsConstants } from 'node:fs'
+import { homedir } from 'node:os'
 import { get as httpGet } from 'node:http'
 import { join, resolve, extname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -31,6 +32,20 @@ const DEV_REPO_ROOT = resolve(__dirname, '../../..')
 // `extraResources` copies `raw_sr`, `desktop/backend` and `requirements.txt`
 // next to the app; electron exposes that directory as `process.resourcesPath`.
 const BACKEND_BASE = app.isPackaged ? process.resourcesPath : DEV_REPO_ROOT
+
+// Self-contained builds (AppImage) ship their own Python under
+// resources/python; it is preferred over anything on the system.
+const BUNDLED_PYTHON = join(process.resourcesPath ?? '', 'python', 'bin', 'python3')
+const HAS_BUNDLED_PYTHON = app.isPackaged && existsSync(BUNDLED_PYTHON)
+
+// Optional GPU add-on (CuPy + CUDA libraries, ~2 GB) installed per user by
+// `--install-gpu`, so the AppImage itself stays small. Added to PYTHONPATH
+// only when present; without it the core falls back to demosaic_drizzle.
+const GPU_SITE = join(
+  process.env.XDG_DATA_HOME?.trim() || join(homedir(), '.local', 'share'),
+  'raw-sr',
+  'gpu-site'
+)
 
 // How long to wait for `GET /api/health` before giving up (imports of cv2 et al.
 // can take a while on a cold start).
@@ -99,6 +114,8 @@ function resolvePython(): string {
     )
   }
 
+  if (HAS_BUNDLED_PYTHON) return BUNDLED_PYTHON
+
   const venvCandidates = [
     join(DEV_REPO_ROOT, 'venv', 'bin', 'python'),
     join(DEV_REPO_ROOT, '.venv', 'bin', 'python'),
@@ -141,7 +158,9 @@ async function startBackend(): Promise<number> {
     cwd: BACKEND_BASE,
     env: {
       ...process.env,
-      PYTHONPATH: BACKEND_BASE,
+      PYTHONPATH: existsSync(GPU_SITE) ? `${BACKEND_BASE}:${GPU_SITE}` : BACKEND_BASE,
+      // The bundled interpreter must not pick up the user's ~/.local packages.
+      ...(HAS_BUNDLED_PYTHON ? { PYTHONNOUSERSITE: '1' } : {}),
       PYTHONUNBUFFERED: '1',
       PYTHONDONTWRITEBYTECODE: '1'
     },
@@ -433,11 +452,74 @@ async function boot(): Promise<void> {
   })
 }
 
+/**
+ * `raw-sr.AppImage --install-gpu`: install CuPy for the local CUDA driver
+ * into GPU_SITE with the bundled Python, print progress to the terminal and
+ * exit. Returns the process exit code.
+ */
+function installGpuAddon(): number {
+  if (!HAS_BUNDLED_PYTHON) {
+    console.error('--install-gpu is only available in the self-contained build (AppImage).')
+    console.error('From a source checkout run: venv/bin/pip install "cupy-cuda13x[ctk]" (or cupy-cuda12x[ctk])')
+    return 2
+  }
+  const smi = spawnSync('nvidia-smi', [], { encoding: 'utf8' })
+  // Older drivers print "CUDA Version: 12.4", newer ones "CUDA UMD Version: 13.5".
+  const m = /CUDA[^:\n]*Version:\s*(\d+)/.exec(smi.stdout ?? '')
+  if (smi.status !== 0 || !m) {
+    console.error('No NVIDIA driver found (nvidia-smi failed). The GPU add-on needs an NVIDIA GPU;')
+    console.error('without it raw-sr still works with the classical CPU path.')
+    return 3
+  }
+  const cudaMajor = Number(m[1])
+  const pkg = cudaMajor >= 13 ? 'cupy-cuda13x[ctk]' : 'cupy-cuda12x[ctk]'
+  console.log(`NVIDIA driver supports CUDA ${cudaMajor}; installing ${pkg} into ${GPU_SITE}`)
+  console.log('This downloads about 1-2 GB once.')
+  mkdirSync(GPU_SITE, { recursive: true })
+  // pip unpacks ~2 GB of wheels; /tmp is often a small tmpfs, so stage them
+  // next to the add-on and remove the staging directory afterwards.
+  const stage = join(GPU_SITE, '..', 'gpu-install-tmp')
+  mkdirSync(stage, { recursive: true })
+  const pip = spawnSync(
+    BUNDLED_PYTHON,
+    ['-m', 'pip', 'install', '--upgrade', '--target', GPU_SITE, pkg],
+    { stdio: 'inherit', env: { ...process.env, PYTHONNOUSERSITE: '1', TMPDIR: stage } }
+  )
+  rmSync(stage, { recursive: true, force: true })
+  if (pip.status !== 0) {
+    console.error('Installing the GPU add-on failed (see the pip output above).')
+    return pip.status ?? 1
+  }
+  // pip --target pulls its own numpy as a CuPy dependency; it would shadow the
+  // bundled numpy that OpenCV/SciPy were built against, so drop it.
+  for (const name of readdirSync(GPU_SITE)) {
+    if (name === 'numpy' || name === 'numpy.libs' || /^numpy-.*\.dist-info$/.test(name)) {
+      rmSync(join(GPU_SITE, name), { recursive: true, force: true })
+    }
+  }
+  const check = spawnSync(
+    BUNDLED_PYTHON,
+    ['-c', 'import cupy; cupy.zeros(1).sum(); print("CuPy", cupy.__version__, "OK on", cupy.cuda.runtime.getDeviceProperties(0)["name"].decode())'],
+    { stdio: 'inherit', env: { ...process.env, PYTHONNOUSERSITE: '1', PYTHONPATH: GPU_SITE } }
+  )
+  if (check.status !== 0) {
+    console.error('CuPy was installed but could not use the GPU (see above).')
+    return check.status ?? 1
+  }
+  console.log('GPU add-on ready. Start raw-sr normally; 2x runs will use the MAP solver.')
+  return 0
+}
+
+const INSTALL_GPU_MODE = process.argv.includes('--install-gpu')
+if (INSTALL_GPU_MODE) {
+  app.exit(installGpuAddon())
+}
+
 // Single-instance lock: focus the existing window instead of starting a
 // second backend.
-const gotLock = app.requestSingleInstanceLock()
+const gotLock = !INSTALL_GPU_MODE && app.requestSingleInstanceLock()
 if (!gotLock) {
-  app.quit()
+  if (!INSTALL_GPU_MODE) app.quit()
 } else {
   app.on('second-instance', () => {
     const win = BrowserWindow.getAllWindows()[0]

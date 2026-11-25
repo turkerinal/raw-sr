@@ -1,0 +1,12 @@
+# Runtime dependencies bundled into the self-contained Linux AppImage
+# (scripts/build_appimage.sh). The desktop app needs the engine and the
+# FastAPI backend only: no PySide6 (legacy Qt UI), no test tools.
+# OpenCV is the headless build, so the bundle needs no Qt/X11 libraries.
+rawpy>=0.20
+opencv-python-headless>=4.8
+numpy>=1.24
+tifffile>=2023.7
+scipy>=1.10
+pyopencl>=2023.1
+fastapi>=0.115
+uvicorn>=0.32

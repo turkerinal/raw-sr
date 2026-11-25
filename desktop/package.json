@@ -1,9 +1,9 @@
 {
   "name": "raw-sr-desktop",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Modern Electron + React + TypeScript desktop UI for raw_sr RAW multi-frame super-resolution",
   "author": "raw_sr",
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",

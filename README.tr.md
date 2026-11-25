@@ -51,6 +51,8 @@ cd raw-sr
 
 `run.sh` Python bağımlılıklarını ve arayüz paketlerini bu deponun içine kurar; hiçbir şeyi sisteme global olarak kurmaz.
 
+**Linux AppImage (kurulum gerektirmez):** Releases sayfasından `raw-sr-<sürüm>-x86_64.AppImage` dosyasını indirin, çalıştırılabilir yapın (`chmod +x` ya da *Özellikler → Çalıştırılmasına izin ver*) ve çift tıklayın. Kendi Python'unu ve kütüphanelerini içerir (~280 MB); her makinede klasik CPU yoluyla çalışır. NVIDIA GPU varsa terminalden bir kez `./raw-sr-<sürüm>-x86_64.AppImage --install-gpu` çalıştırın: sürücünüze uygun CuPy'yi indirir (~2 GB, `~/.local/share/raw-sr/gpu-site` içine) ve 2× işler artık MAP çözücüyü kullanır. AppImage'ı kendiniz derlemek için: `scripts/build_appimage.sh`.
+
 **NVIDIA GPU (2× için önerilir):** 2× varsayılanı olan MAP çözücü [CuPy](https://cupy.dev) ister; doğru paket CUDA sürümünüze bağlı olduğu için otomatik kurulmaz. Projenin ortamına kurun, ör. `venv/bin/pip install "cupy-cuda13x[ctk]"` (CUDA 13) ya da `venv/bin/pip install "cupy-cuda12x[ctk]"` (CUDA 12). CuPy ya da NVIDIA GPU yoksa her şey yine çalışır, ama `fusion="auto"` MAP yerine klasik `demosaic_drizzle` yolunu kullanır.
 
 ## Masaüstü uygulaması

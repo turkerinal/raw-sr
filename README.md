@@ -51,6 +51,8 @@ cd raw-sr
 
 `run.sh` installs the Python dependencies and UI packages inside this repository; nothing is installed globally.
 
+**Linux AppImage (no installation):** download `raw-sr-<version>-x86_64.AppImage` from the Releases page, make it executable (`chmod +x`, or *Properties → Allow executing*) and double-click it. It bundles its own Python and libraries (~280 MB) and runs the classical CPU path everywhere. With an NVIDIA GPU, run once from a terminal `./raw-sr-<version>-x86_64.AppImage --install-gpu`: it downloads CuPy for your driver (~2 GB, into `~/.local/share/raw-sr/gpu-site`) and 2× runs then use the MAP solver. To build the AppImage yourself: `scripts/build_appimage.sh`.
+
 **NVIDIA GPU (recommended for 2×):** the 2× default MAP solver needs [CuPy](https://cupy.dev), which is not installed automatically because the right package depends on your CUDA version. Install it into the project's environment, e.g. `venv/bin/pip install "cupy-cuda13x[ctk]"` (CUDA 13) or `venv/bin/pip install "cupy-cuda12x[ctk]"` (CUDA 12). Without CuPy or without an NVIDIA GPU everything still works, but `fusion="auto"` uses the classical `demosaic_drizzle` path instead of MAP.
 
 ## Desktop app

@@ -19,18 +19,26 @@ extraResources:
   # Engine (pure Python): imported by the backend.
   - from: ../raw_sr
     to: raw_sr
+    filter: ["**/*", "!ui/**", "!main.py", "!**/__pycache__/**"]
+  # Self-contained Python + runtime deps, built by scripts/build_appimage.sh.
+  # Absent in a plain `npm run package`; the app then falls back to a system
+  # or repo Python.
+  - from: bundle/python
+    to: python
   # Python dependency manifest (used by run.sh / packagers).
   - from: ../requirements.txt
     to: requirements.txt
   # Backend package, kept under `desktop/` so `desktop.backend.server` imports.
   - from: backend
     to: desktop/backend
+    filter: ["**/*", "!tests/**", "!**/__pycache__/**"]
   - from: __init__.py
     to: desktop/__init__.py
 
 linux:
   target:
     - AppImage
+  artifactName: raw-sr-${version}-${arch}.AppImage
   category: Graphics
   synopsis: RAW multi-frame super-resolution
   description: >-

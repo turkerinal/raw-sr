@@ -26,3 +26,8 @@ output/
 
 # Downloaded public datasets (scripts/fetch_hdrplus.sh)
 data/
+
+# AppImage build (scripts/build_appimage.sh)
+/desktop/bundle/
+/desktop/bundle-cache/
+/desktop/release/
