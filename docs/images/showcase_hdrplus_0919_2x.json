@@ -1,0 +1,86 @@
+{
+  "name": "HDR+ 0919 (Building Facade)",
+  "ratio": 2.0,
+  "experimental": false,
+  "frames_total": 8,
+  "frames_used": 8,
+  "reference_index": 5,
+  "input_roi": [
+    1504,
+    1000,
+    1024,
+    1024
+  ],
+  "hr_shape_hxw": [
+    2048,
+    2048
+  ],
+  "crop_xy_size": [
+    1056,
+    216,
+    320
+  ],
+  "zoom_subcrop_xy_size": [
+    8,
+    136,
+    160
+  ],
+  "alignment_offset_hr_px": [
+    0.0068,
+    -0.019
+  ],
+  "alignment_offset_norm_hr_px": 0.0202,
+  "edge_roi": [
+    1320,
+    400,
+    160,
+    160
+  ],
+  "flat_roi": [
+    816,
+    912,
+    96,
+    96
+  ],
+  "fusion": "map",
+  "panel_layout": [
+    "single_bicubic",
+    "single_enhanced",
+    "old_default_enhanced",
+    "map_default"
+  ],
+  "enhance_strength": 0.65,
+  "optics_sigma_est_lr_px": 0.4014,
+  "image": {
+    "path": "docs/images/showcase_hdrplus_0919_2x.png",
+    "shape_hxw": [
+      724,
+      1292
+    ],
+    "size_kb": 636.8,
+    "exposure": 1.498,
+    "max_clip_pct": 0.077
+  },
+  "panels": {
+    "single_bicubic": {
+      "mtf50_cyc_per_lr_px": 0.3668,
+      "flat_immerkaer_sigma": 0.000103,
+      "flat_std_sigma": 0.003558
+    },
+    "single_enhanced": {
+      "mtf50_cyc_per_lr_px": 0.682,
+      "flat_immerkaer_sigma": 0.000443,
+      "flat_std_sigma": 0.004259
+    },
+    "old_default_enhanced": {
+      "mtf50_cyc_per_lr_px": 0.8824,
+      "flat_immerkaer_sigma": 0.000119,
+      "flat_std_sigma": 0.001571
+    },
+    "map_default": {
+      "mtf50_cyc_per_lr_px": 0.3832,
+      "flat_immerkaer_sigma": 5.2e-05,
+      "flat_std_sigma": 0.00181
+    }
+  }
+}

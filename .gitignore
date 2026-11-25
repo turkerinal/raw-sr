@@ -1,0 +1,28 @@
+
+# AI assistant artifacts
+context-snapshot.json
+
+# Python
+venv/
+/venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+dist/
+build/
+
+# Test data (large binary RAW samples); also ignore a local `test_data`
+# symlink to a burst that lives outside the repository.
+test_data/
+/test_data
+state.md
+session-log.md
+
+# Acceptance output (large generated TIFFs/PNGs)
+output/
+
+# Downloaded public datasets (scripts/fetch_hdrplus.sh)
+data/

@@ -1,0 +1,87 @@
+/* ZoomPanView — self-contained styles. Tokens come from styles/global.css. */
+
+.zp {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zp__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zp__btn {
+  appearance: none;
+  background: var(--panel-2);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.4;
+  cursor: pointer;
+  min-width: 30px;
+  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+}
+
+.zp__btn:hover:not(:disabled) {
+  background: var(--bg-elev);
+  border-color: var(--accent);
+}
+
+.zp__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.zp__sep {
+  flex: 1;
+}
+
+.zp__zoom {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 52px;
+  text-align: right;
+}
+
+.zp__viewport {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: clamp(260px, 48vh, 620px);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.zp__viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.zp__viewport.is-empty {
+  cursor: default;
+}
+
+.zp__img {
+  display: block;
+  transform-origin: center center;
+  will-change: transform;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.zp__placeholder {
+  color: var(--faint);
+  font-size: 12px;
+}

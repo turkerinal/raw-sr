@@ -1,0 +1,292 @@
+/* Result feature (AGENT-E) — additions only; tokens, layout and
+   .metrics-grid/.canvas-wrap classes live in styles/global.css, and the shared
+   ui/ZoomPanView supplies its own .zp* styles. */
+
+.result__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.result__view {
+  gap: 10px;
+}
+
+/* One-line plain reading of the headline metric, directly under the grid. */
+.result__metric-note {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Advanced diagnostics (stack-relative numbers, fusion weights). */
+.result__advanced {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  padding: 8px 11px;
+}
+
+.result__advanced > summary {
+  cursor: pointer;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  user-select: none;
+}
+
+.result__advanced[open] > summary {
+  margin-bottom: 8px;
+}
+
+.result__section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+/* ---------- Comparison: two independent panes ---------- */
+.result__compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+
+.result__pane {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.result__pane-title {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+/* Compact viewport so two panes sit comfortably side by side. */
+.result__compare .zp__viewport {
+  height: clamp(220px, 34vh, 460px);
+}
+
+@media (max-width: 900px) {
+  .result__compare {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Quality map (bottom section) ---------- */
+.result__quality {
+  gap: 10px;
+}
+
+/* ---------- AlignmentView ---------- */
+.align__summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--muted);
+  border-radius: var(--radius);
+}
+
+.align__summary--ok {
+  border-left-color: var(--ok);
+}
+
+.align__summary--warn {
+  border-left-color: var(--warn);
+}
+
+.align__summary--bad {
+  border-left-color: var(--bad);
+}
+
+.align__score-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  padding-right: 16px;
+  border-right: 1px solid var(--border);
+}
+
+.align__score {
+  font-family: var(--mono);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.align__summary--ok .align__score {
+  color: var(--ok);
+}
+
+.align__summary--warn .align__score {
+  color: var(--warn);
+}
+
+.align__summary--bad .align__score {
+  color: var(--bad);
+}
+
+.align__score-label {
+  margin-top: 2px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  text-align: center;
+}
+
+.align__verdict {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.align__message {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.align__subs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.align__subs strong {
+  color: var(--text);
+}
+
+.align__frames {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.align__frames-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.align__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.align__row {
+  display: grid;
+  grid-template-columns: 52px minmax(60px, 1.4fr) 56px 74px 96px 62px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.align__row--dropped {
+  opacity: 0.5;
+}
+
+.align__id {
+  font-family: var(--mono);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.align__bar {
+  position: relative;
+  height: 7px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.align__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.15s;
+}
+
+.align__bar-fill--ok {
+  background: var(--ok);
+}
+
+.align__bar-fill--warn {
+  background: var(--warn);
+}
+
+.align__bar-fill--bad {
+  background: var(--bad);
+}
+
+.align__zncc {
+  color: var(--text);
+  text-align: right;
+}
+
+.align__meta {
+  color: var(--muted);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.align__flag {
+  justify-self: end;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: var(--muted);
+  border: 1px solid var(--border-strong);
+}
+
+.align__flag--used {
+  color: var(--ok);
+  border-color: rgba(56, 193, 114, 0.4);
+  background: rgba(56, 193, 114, 0.1);
+}
+
+@media (max-width: 640px) {
+  .align__row {
+    grid-template-columns: 46px minmax(50px, 1fr) 48px 64px;
+  }
+
+  .align__meta[title='shift (x, y)'],
+  .align__flag {
+    display: none;
+  }
+}

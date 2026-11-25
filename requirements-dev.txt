@@ -1,0 +1,6 @@
+-r requirements.txt
+# Desktop backend API (FastAPI) tests live under desktop/backend/tests;
+# their deps are kept in one place so a root `pytest` works after this file.
+-r desktop/backend/requirements.txt
+pytest>=7.0
+pytest-cov>=4.0

@@ -1,0 +1,35 @@
+{
+  "name": "raw-sr-desktop",
+  "version": "1.0.0",
+  "description": "Modern Electron + React + TypeScript desktop UI for raw_sr RAW multi-frame super-resolution",
+  "author": "raw_sr",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "npm run typecheck && electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "package": "npm run build && electron-builder"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  },
+  "allowScripts": {
+    "electron@33.4.11": true,
+    "esbuild@0.21.5": true
+  }
+}

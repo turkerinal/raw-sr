@@ -1,0 +1,188 @@
+/* ROI editor — preview stage, zoom/pan, drag rectangles and readouts. Owned by AGENT-D. */
+
+.roi-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.roi-toolbar__group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.roi-zoom__value {
+  min-width: 44px;
+  text-align: center;
+  color: var(--muted);
+}
+.roi-cropnote {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px 9px;
+}
+
+/* ---------- preview stage (zoom/pan viewport) ---------- */
+.roi-stage {
+  position: relative;
+  width: 100%;
+  background: #0b0e12;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  touch-action: none;
+  cursor: crosshair;
+  user-select: none;
+}
+.roi-content {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.roi-stage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.roi-stage--dragging {
+  cursor: crosshair;
+}
+.roi-stage--panning {
+  cursor: grabbing;
+}
+
+/* ---------- overlay rectangles ---------- */
+.roi-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.roi-box {
+  position: absolute;
+  border: 1.5px solid;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.roi-box--target {
+  border-color: var(--accent);
+  background: rgba(79, 156, 249, 0.14);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+}
+.roi-box--search {
+  border-color: var(--warn);
+  border-style: dashed;
+  background: rgba(240, 180, 41, 0.1);
+}
+.roi-box.is-active {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.22);
+}
+.roi-box__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: 2px 0 4px 0;
+  transform: translateY(0);
+}
+.roi-box--target .roi-box__label {
+  background: var(--accent);
+  color: #fff;
+}
+.roi-box--search .roi-box__label {
+  background: var(--warn);
+  color: #1a1300;
+}
+
+/* ---------- resize handles (visual; hit-tested in JS) ---------- */
+.roi-box--target { color: var(--accent); }
+.roi-box--search { color: var(--warn); }
+.roi-handle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  margin: -5px 0 0 -5px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  background: var(--bg);
+  box-sizing: border-box;
+  transform: scale(var(--roi-handle-scale, 1));
+}
+.roi-handle--nw { left: 0; top: 0; }
+.roi-handle--n  { left: 50%; top: 0; }
+.roi-handle--ne { left: 100%; top: 0; }
+.roi-handle--e  { left: 100%; top: 50%; }
+.roi-handle--se { left: 100%; top: 100%; }
+.roi-handle--s  { left: 50%; top: 100%; }
+.roi-handle--sw { left: 0; top: 100%; }
+.roi-handle--w  { left: 0; top: 50%; }
+
+/* ---------- readouts ---------- */
+.roi-readouts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--gap);
+}
+.roi-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+.roi-readout--target {
+  border-left: 3px solid var(--accent);
+}
+.roi-readout--search {
+  border-left: 3px solid var(--warn);
+}
+.roi-readout__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.roi-readout__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+.roi-readout__empty {
+  font-size: 12px;
+}
+.roi-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+.roi-swatch--target { background: var(--accent); }
+.roi-swatch--search { background: var(--warn); }
+
+.roi-fields {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.roi-fields .field__label {
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+.roi-fields .numberfield input {
+  padding: 5px 7px;
+  font-size: 12px;
+}

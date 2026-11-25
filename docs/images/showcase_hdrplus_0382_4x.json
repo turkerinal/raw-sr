@@ -1,0 +1,79 @@
+{
+  "name": "HDR+ 0382 (Glass Objects)",
+  "ratio": 4.0,
+  "experimental": true,
+  "frames_total": 8,
+  "frames_used": 8,
+  "reference_index": 4,
+  "input_roi": [
+    1504,
+    1000,
+    1024,
+    1024
+  ],
+  "hr_shape_hxw": [
+    4096,
+    4096
+  ],
+  "crop_xy_size": [
+    816,
+    2736,
+    384
+  ],
+  "zoom_subcrop_xy_size": [
+    56,
+    152,
+    192
+  ],
+  "alignment_offset_hr_px": [
+    0.4172,
+    0.0055
+  ],
+  "alignment_offset_norm_hr_px": 0.4173,
+  "edge_roi": [
+    960,
+    2016,
+    192,
+    192
+  ],
+  "flat_roi": [
+    192,
+    1216,
+    128,
+    128
+  ],
+  "enhance_strength": 0.65,
+  "optics_sigma_est_lr_px": 0.2129,
+  "image": {
+    "path": "docs/images/showcase_hdrplus_0382_4x.png",
+    "shape_hxw": [
+      852,
+      1548
+    ],
+    "size_kb": 1060.0,
+    "exposure": 2.139,
+    "max_clip_pct": 0.726
+  },
+  "panels": {
+    "single_bicubic": {
+      "mtf50_cyc_per_lr_px": 0.2157,
+      "flat_immerkaer_sigma": 4e-06,
+      "flat_std_sigma": 0.00388
+    },
+    "single_enhanced": {
+      "mtf50_cyc_per_lr_px": 1.536,
+      "flat_immerkaer_sigma": 4e-05,
+      "flat_std_sigma": 0.003993
+    },
+    "raw_sr": {
+      "mtf50_cyc_per_lr_px": 0.2347,
+      "flat_immerkaer_sigma": 0.000126,
+      "flat_std_sigma": 0.003417
+    },
+    "raw_sr_enhanced": {
+      "mtf50_cyc_per_lr_px": 0.2747,
+      "flat_immerkaer_sigma": 0.000125,
+      "flat_std_sigma": 0.003412
+    }
+  }
+}

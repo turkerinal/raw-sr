@@ -1,0 +1,86 @@
+{
+  "name": "Own 9-frame Burst (Roof Tiles)",
+  "ratio": 2.0,
+  "experimental": false,
+  "frames_total": 9,
+  "frames_used": 9,
+  "reference_index": 2,
+  "input_roi": [
+    1650,
+    1240,
+    1024,
+    1024
+  ],
+  "hr_shape_hxw": [
+    2048,
+    2048
+  ],
+  "crop_xy_size": [
+    96,
+    1576,
+    320
+  ],
+  "zoom_subcrop_xy_size": [
+    40,
+    8,
+    160
+  ],
+  "alignment_offset_hr_px": [
+    -0.1237,
+    -0.0661
+  ],
+  "alignment_offset_norm_hr_px": 0.1402,
+  "edge_roi": [
+    800,
+    1040,
+    160,
+    160
+  ],
+  "flat_roi": [
+    1392,
+    1056,
+    96,
+    96
+  ],
+  "fusion": "map",
+  "panel_layout": [
+    "single_bicubic",
+    "single_enhanced",
+    "old_default_enhanced",
+    "map_default"
+  ],
+  "enhance_strength": 0.65,
+  "optics_sigma_est_lr_px": 0.7,
+  "image": {
+    "path": "docs/images/showcase_own9_2x.png",
+    "shape_hxw": [
+      724,
+      1292
+    ],
+    "size_kb": 533.2,
+    "exposure": 2.46,
+    "max_clip_pct": 0.022
+  },
+  "panels": {
+    "single_bicubic": {
+      "mtf50_cyc_per_lr_px": 0.0507,
+      "flat_immerkaer_sigma": 6.6e-05,
+      "flat_std_sigma": 0.00263
+    },
+    "single_enhanced": {
+      "mtf50_cyc_per_lr_px": 0.1416,
+      "flat_immerkaer_sigma": 0.000249,
+      "flat_std_sigma": 0.003141
+    },
+    "old_default_enhanced": {
+      "mtf50_cyc_per_lr_px": 0.1255,
+      "flat_immerkaer_sigma": 0.000145,
+      "flat_std_sigma": 0.001324
+    },
+    "map_default": {
+      "mtf50_cyc_per_lr_px": 0.0519,
+      "flat_immerkaer_sigma": 4e-06,
+      "flat_std_sigma": 0.001305
+    }
+  }
+}
